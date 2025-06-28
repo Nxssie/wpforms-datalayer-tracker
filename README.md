@@ -139,19 +139,19 @@ The plugin includes console logging for debugging. Open your browser's developer
 
 ## ❓ FAQ
 
-**Q: Do I need to configure anything after installation?**
+**Q: Do I need to configure anything after installation?**  
 A: No, the plugin works automatically once activated.
 
-**Q: Is it compatible with AJAX forms?**
+**Q: Is it compatible with AJAX forms?**  
 A: Yes, it's optimized for WPForms AJAX submissions and also works with traditional submissions.
 
-**Q: Can I customize which fields are excluded?**
+**Q: Can I customize which fields are excluded?**  
 A: Yes! Use the `wpforms_datalayer_excluded_fields` filter to customize the exclusion list.
 
-**Q: How do I add custom excluded fields?**
+**Q: How do I add custom excluded fields?**  
 A: Add the filter hook to your theme's functions.php or a custom plugin as shown in the Customization section.
 
-**Q: Does it affect site performance?**
+**Q: Does it affect site performance?**  
 A: No, the plugin is very lightweight and only executes when forms are submitted.
 
 ## 🔒 Privacy
