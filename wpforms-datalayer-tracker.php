@@ -106,7 +106,7 @@ add_action('wp_footer', function() {
                 
                 function pushFormDataToDataLayer(formId, fields) {
                     var formData = {};
-                    var excludeFields = ['email', 'telefono', 'correo_electrónico'];
+                    var excludeFields = ['email', 'telefono', 'correo_electrónico', 'phone_number', 'email_address'];
                     
                     if (fields && typeof fields === 'object') {
                         $.each(fields, function(fieldId, field) {
