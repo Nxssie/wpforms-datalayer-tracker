@@ -19,18 +19,17 @@ A lightweight WordPress plugin that automatically sends successful WPForms submi
 ## 📊 Data Structure
 
 When a form is submitted, the following data is pushed to the dataLayer:
-```
-javascript
+```json
 {
-event: 'wpforms_submission',
-form_id: 123,
-form_name: 'Contact Form',
-form_data: {
-name: 'John Doe',
-message: 'Hello world',
-// ... other non-sensitive fields
-},
-entry_id: 456
+  "event": "wpforms_submission",
+  "form_id": 123,
+  "form_name": "Contact Form",
+  "form_data": {
+    "name": "John Doe",
+    "message": "Hello world"
+    // ... other non-sensitive fields
+  },
+  "entry_id": 456
 }
 ```
 ### Excluded Fields (for privacy)
@@ -46,8 +45,7 @@ By default, these fields are excluded:
 ### Exclude Additional Fields
 
 You can customize which fields are excluded using the filter hook:
-```
-php
+```php
 add_filter('wpforms_datalayer_excluded_fields', function($fields) {
 // Add more sensitive fields
 $fields[] = 'password';
@@ -60,8 +58,7 @@ $fields[] = 'ssn';
 ### Modify DataLayer Data
 
 You can modify the complete data before it's sent to the dataLayer:
-```
-php
+```php
 add_filter('wpforms_datalayer_data', function($data, $form_data, $entry_id) {
 // Add custom data
 $data['custom_field'] = 'custom_value';
