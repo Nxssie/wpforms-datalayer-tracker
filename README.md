@@ -27,7 +27,6 @@ When a form is submitted, the following data is pushed to the dataLayer:
   "form_data": {
     "name": "John Doe",
     "message": "Hello world"
-    // ... other non-sensitive fields
   },
   "entry_id": 456
 }
