@@ -3,7 +3,7 @@
  * Plugin Name: WPForms DataLayer Tracker
  * Plugin URI: https://github.com/nxssie/wpforms-datalayer-tracker
  * Description: Automatically sends successful WPForms submissions to Google Tag Manager via dataLayer for tracking and analytics.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: nxssie
  * Author URI: https://profiles.wordpress.org/nxssie/
  * License: GPL v3 or later
@@ -107,9 +107,15 @@ class WPFormsDataLayerTracker {
                 var $ = jQuery;
                 
                 $(document).ready(function() {
+                    // Always attempt to retrieve server-side submission data in case of non-AJAX submissions
+                    fetchSubmissionData();
+
                     $(document).on('wpformsAjaxSubmitSuccess', function(event, formId, fields, form) {
                         console.log('WPForms submission detected:', {formId: formId, fields: fields, form: form});
-                        
+                        fetchSubmissionData(formId, fields);
+                    });
+
+                    function fetchSubmissionData(formId, fields) {
                         $.ajax({
                             url: '<?php echo esc_url(admin_url('admin-ajax.php')); ?>',
                             type: 'POST',
@@ -122,14 +128,19 @@ class WPFormsDataLayerTracker {
                                     window.dataLayer = window.dataLayer || [];
                                     window.dataLayer.push(response.data);
                                     console.log('DataLayer push successful:', response.data);
+                                } else if (formId && fields) {
+                                    // Fallback to local form data if server response is empty
+                                    pushFormDataToDataLayer(formId, fields);
                                 }
                             },
                             error: function(xhr, status, error) {
                                 console.log('Error retrieving submission data, using fallback:', error);
-                                pushFormDataToDataLayer(formId, fields);
+                                if (formId && fields) {
+                                    pushFormDataToDataLayer(formId, fields);
+                                }
                             }
                         });
-                    });
+                    }
                     
                     function pushFormDataToDataLayer(formId, fields) {
                         var formData = {};
