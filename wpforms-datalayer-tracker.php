@@ -14,7 +14,6 @@
  * Requires PHP: 7.4
  */
 
-// Prevent direct access
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -34,16 +33,11 @@ class WPFormsDataLayerTracker {
     }
     
     public function handle_form_submission($fields, $entry, $form_data, $entry_id) {
-        // Default excluded fields
         $default_excluded_fields = array(
-            'email', 
-            'telefono', 
-            'correo_electrónico', 
-            'phone_number', 
-            'email_address'
+            'email',
+            'phone_number'
         );
-        
-        // Apply filter to allow customization
+
         $exclude_fields = apply_filters('wpforms_datalayer_excluded_fields', $default_excluded_fields);
         
         $processed_fields = array();
@@ -64,8 +58,7 @@ class WPFormsDataLayerTracker {
             'form_data' => $processed_fields,
             'entry_id' => $entry_id
         );
-        
-        // Apply filter to allow complete data modification
+
         $data = apply_filters('wpforms_datalayer_data', $data, $form_data, $entry_id);
         
         set_transient('wpfdt_last_submission', $data, 60);
@@ -88,7 +81,6 @@ class WPFormsDataLayerTracker {
     }
     
     public function output_frontend_script() {
-        // Solo ejecutar en el frontend
         if (is_admin()) {
             return;
         }
@@ -96,7 +88,6 @@ class WPFormsDataLayerTracker {
         $excluded_fields = $this->get_excluded_fields_for_js();
         ?>
         <script type="text/javascript">
-        // Esperar a que jQuery esté disponible
         (function() {
             function initWPFormsTracker() {
                 if (typeof jQuery === 'undefined') {
@@ -107,7 +98,6 @@ class WPFormsDataLayerTracker {
                 var $ = jQuery;
                 
                 $(document).ready(function() {
-                    // Always attempt to retrieve server-side submission data in case of non-AJAX submissions
                     fetchSubmissionData();
 
                     $(document).on('wpformsAjaxSubmitSuccess', function(event, formId, fields, form) {
@@ -129,7 +119,6 @@ class WPFormsDataLayerTracker {
                                     window.dataLayer.push(response.data);
                                     console.log('DataLayer push successful:', response.data);
                                 } else if (formId && fields) {
-                                    // Fallback to local form data if server response is empty
                                     pushFormDataToDataLayer(formId, fields);
                                 }
                             },
@@ -162,8 +151,7 @@ class WPFormsDataLayerTracker {
                             form_id: formId,
                             form_data: formData
                         };
-                        
-                        // Apply any JavaScript filters if they exist
+
                         if (typeof wpforms_datalayer_modify_data === 'function') {
                             dataLayerData = wpforms_datalayer_modify_data(dataLayerData);
                         }
@@ -174,8 +162,7 @@ class WPFormsDataLayerTracker {
                     }
                 });
             }
-            
-            // Iniciar el tracker
+
             initWPFormsTracker();
         })();
         </script>
@@ -196,5 +183,4 @@ class WPFormsDataLayerTracker {
     }
 }
 
-// Initialize the plugin
 new WPFormsDataLayerTracker();
