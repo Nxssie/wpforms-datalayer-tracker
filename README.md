@@ -170,7 +170,6 @@ This plugin:
 
 ### 1.0.1 (Current)
 - Fix bug where dataLayer push did not occur for non-AJAX form submissions
--
 ### 1.0.0
 - Initial release
 - Basic WPForms integration
